@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jslhrd.board.mapper.BoardMapper">
+
+	<!-- 전체 카운트 -->
+	<select id="boardCount" resultType="int">
+		select count(*) from tbl_board
+	</select>
+	<!-- 검색글수 카운트 -->
+	<select id="boardCountSearch" resultType="int">
+		select count(*) from tbl_board where
+		<choose>
+			<when test="search=='name'">
+				name like '%' || #{key} || '%'
+			</when>
+			<when test="search=='subject'">
+				subject like '%' || #{key} || '%'
+			</when>
+			<when test="search=='contents'">
+				contents like '%' || #{key} || '%'
+			</when>
+		</choose>
+	</select>
+	<!-- 전체 게시글 -->
+	<select id="boardList" resultType="com.jslhrd.board.domain.BoardDTO">
+		select * from tbl_board order by regdate desc
+	</select>
+	<!-- 전체글 목록(검색 o, 페이징x) -->
+	<select id="boardListSearch" resultType="com.jslhrd.board.domain.BoardDTO">
+		select * from tbl_board where 
+		<choose>
+			<when test="search=='name'">
+				name like '%' || #{key} || '%'
+			</when>
+			<when test="search=='subject'">
+				subject like '%' || #{key} || '%'
+			</when>
+			<when test="search=='contents'">
+				contents like '%' || #{key} || '%'
+			</when>
+		</choose>
+		 order by regdate desc
+	</select>
+	<!-- 글 등록 -->
+	<insert id="boardWrite">
+		insert into tbl_board(idx,name,email,pass,subject,contents)
+					values(tbl_board_seq_idx.nextval,#{name},#{email},#{pass},#{subject},#{contents})
+	</insert>
+	<!-- 조회수 증가  -->
+	<update id="boardHits">
+		update tbl_board set readcnt = readcnt+1 where idx = #{idx}
+	</update>
+	<!-- view 글 상세보기  -->
+	<select id="boardSelect" resultType="com.jslhrd.board.domain.BoardDTO">
+		select * from tbl_board where idx= #{idx}
+	</select>
+	<!-- 글 수정 -->
+	<update id="boardModify">
+		update tbl_board set subject=#{subject}, contents=#{contents} 
+		where idx=#{idx} and pass=#{pass}
+	</update>
+	<!-- 글 삭제 -->
+	<delete id="boardDelete">
+		delete from tbl_board where idx=#{idx} and pass=#{pass}
+	</delete>
+</mapper>
