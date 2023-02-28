@@ -9,5 +9,5 @@ class ExBoardApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-//수정
+
 }
