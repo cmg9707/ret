@@ -9,5 +9,5 @@ public class ExBoardApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ExBoardApplication.class, args);
 	}
-
+//추가부분
 }
